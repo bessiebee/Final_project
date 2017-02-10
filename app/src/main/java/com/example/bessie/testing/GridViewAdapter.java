@@ -17,6 +17,8 @@ import java.util.List;
 public class GridViewAdapter extends ArrayAdapter<Product>{
 
 
+//    private static final  R = ;
+
     public GridViewAdapter(Context context, int resource, List<Product> objects) {
         super(context, resource, objects);
     }

@@ -3,11 +3,14 @@ package com.example.bessie.testing;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +54,10 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sharedpreferences = getSharedPreferences("ViewMode", MODE_PRIVATE);
         currentViewMode = sharedpreferences.getInt("currentViewMode", VIEW_MODE_LISTVIEW);//default is listview
+        //Register item click
+        listview.setOnItemClickListener(onItemClick);
+        gridView.setOnItemClickListener(onItemClick);
+
 
         switchView();
 
@@ -105,5 +112,51 @@ public class MainActivity extends AppCompatActivity {
         return productList;
     }
 
-    
+    AdapterView.OnItemClickListener onItemClick = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            //do anything when user clicks on item
+            Toast.makeText(getApplicationContext(), productList.get(position).getTitle()+"-"+ productList.get(position).getDescription(),Toast.LENGTH_SHORT).show();
+
+        }
+    };
+
+         @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+             getMenuInflater().inflate(R.menu.main, menu);
+             return super.onCreateOptionsMenu(menu);
+
+
+         }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+
+        switch (item.getItemId()){
+            case R.id.item_menu_1:
+                if(VIEW_MODE_LISTVIEW == currentViewMode) {
+                    currentViewMode = VIEW_MODE_GRIDVIEW;
+
+                }
+                else {
+                    currentViewMode = VIEW_MODE_LISTVIEW ;
+                }
+                   //switch view
+                switchView();
+                //save view  mode in share reference
+
+                SharedPreferences sharedPreferences = getSharedPreferences("Viewmode",MODE_PRIVATE);
+                SharedPreferences.Editor  editor =  sharedPreferences.edit();
+                editor.putInt("currentViewMode", currentViewMode);
+                editor.commit();
+
+
+                break;
+        }
+
+        return true;
+
+    }
+
+
 }
